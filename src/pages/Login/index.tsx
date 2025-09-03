@@ -20,13 +20,24 @@ const schema = yup
 const Login = () => {
   const {
     control,
+    watch,
+    handleSubmit,
     formState: { errors, isValid },
   } = useForm<IFormLogin>({
     resolver: yupResolver(schema),
-    mode: "onBlur",
+    mode: "onChange",
     defaultValues,
     reValidateMode: "onChange",
   });
+
+  console.log(isValid);
+
+  // const form = watch();
+  // console.log(form);
+
+  const aoSalvar = (data: IFormLogin) => {
+    console.log("Form enviado com sucesso:", data);
+  };
 
   return (
     <Container>
@@ -34,25 +45,27 @@ const Login = () => {
         <Column>
           <Title>Login</Title>
           <Spacing />
-          <Input
-            name="email"
-            placeholder="Email"
-            control={control}
-            errorMessage={errors?.email?.message}
-          />
-          <Spacing />
-          <Input
-            name="password"
-            type="password"
-            placeholder="Senha"
-            control={control}
-            errorMessage={errors?.password?.message}
-          />
-          <Spacing />
-          <Button title="Entrar" />
-        </Column>
-      </LoginContainer>
-    </Container>
+          <form onSubmit={handleSubmit(aoSalvar)}>
+            <Input
+              name="email"
+              placeholder="Email"
+              control={control}
+              errorMessage={errors?.email?.message}
+            />
+            <Spacing />
+            <Input
+              name="password"
+              type="password"
+              placeholder="Senha"
+              control={control}
+              errorMessage={errors?.password?.message}
+            />
+            <Spacing />
+            <Button title="Entrar" type="submit" disabled={!isValid} />
+        </form>
+      </Column>
+    </LoginContainer>
+    </Container >
   );
 };
 
